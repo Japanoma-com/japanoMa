@@ -1,0 +1,211 @@
+/* Tier 1: Functional micro-interactions — always on */
+
+/* Focus ring materialises */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--washi), 0 0 0 5px var(--ai);
+  transition: box-shadow var(--duration-fast) var(--ease-settle);
+}
+
+/* Accordion smooth expand */
+[data-state='open'] [data-radix-accordion-content] {
+  animation: accordion-expand var(--duration-slow) var(--ease-settle);
+}
+
+@keyframes accordion-expand {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+/* Badge appear — fade in + translateY, per Ma Space v4 Tier 1 spec */
+.badge-appear {
+  opacity: 0;
+  transform: translateY(4px);
+  animation: badge-appear 250ms var(--ease-settle) forwards;
+}
+
+@keyframes badge-appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-appear {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   Tier 2: Scroll Reveal — compositor-only, GPU-accelerated
+   transform + opacity = skip layout + paint = 60fps
+   ───────────────────────────────────────────────────────── */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  will-change: transform, opacity;
+  transition:
+    opacity 0.6s var(--ease-settle) var(--reveal-delay, 0ms),
+    transform 0.6s var(--ease-settle) var(--reveal-delay, 0ms);
+  backface-visibility: hidden;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+    transition: none;
+  }
+}
+
+/* Tier 2: Ken Burns — subtle slow zoom on hero images */
+@keyframes ken-burns {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 20s var(--ease-settle) infinite;
+}
+
+/* Tier 2: Crop-mark register — corner brackets scale in from 0 like a
+   darkroom registration mark being placed on a print. Tiny transform
+   scale with eased opacity reads as "placing" rather than "appearing".
+   Uses --mark-delay for the 4-corner stagger. */
+@keyframes register-mark {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 0.6; }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-register-mark {
+  transform-origin: center;
+  animation: register-mark 600ms var(--ease-settle) var(--mark-delay, 0ms) both;
+}
+
+/* Tier 2: Rule-extend — a horizontal hair-line grows from 0 → full.
+   Used for chapter rules and bilingual lockup dashes. */
+@keyframes rule-extend {
+  0%   { transform: scaleX(0); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+.animate-rule-extend {
+  transform-origin: left center;
+  animation: rule-extend 900ms var(--ease-settle) var(--rule-delay, 0ms) both;
+}
+
+.animate-rule-extend-center {
+  transform-origin: center;
+  animation: rule-extend 900ms var(--ease-settle) var(--rule-delay, 0ms) both;
+}
+
+/* Tier 2: Mount fade-up — for above-the-fold content (hero) that should
+   reveal immediately on page load rather than wait for a scroll trigger.
+   Uses --fade-delay custom prop for stagger. */
+@keyframes fade-up {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.animate-fade-up {
+  will-change: transform, opacity;
+  animation: fade-up 700ms var(--ease-settle) var(--fade-delay, 0ms) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Tier 2: Scroll hint — a slow travelling mark down a thin rule.
+   Signals "there's more below" without shouting. */
+@keyframes scroll-pulse {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(150%); opacity: 0; }
+}
+
+.animate-scroll-pulse {
+  animation: scroll-pulse 2.4s var(--ease-settle) infinite;
+}
+
+/* Horizontal variant for the pedestal-base scroll hint */
+@keyframes scroll-pulse-h {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(250%); opacity: 0; }
+}
+
+.animate-scroll-pulse-h {
+  animation: scroll-pulse-h 2.4s var(--ease-settle) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-pulse,
+  .animate-scroll-pulse-h,
+  .animate-ken-burns {
+    animation: none;
+  }
+  .animate-register-mark {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .animate-rule-extend,
+  .animate-rule-extend-center {
+    transform: scaleX(1);
+    animation: none;
+  }
+}
+
+/* Ma Skeleton — warm breathing pulse */
+.ma-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--washi) 0%,
+    var(--shoji) 40%,
+    var(--washi) 80%
+  );
+  background-size: 200% 100%;
+  animation: ma-breathe 1.8s var(--ease-settle) infinite;
+}
+
+@keyframes ma-breathe {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Reduced motion: instant everything */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

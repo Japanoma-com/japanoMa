@@ -1,0 +1,84 @@
+/* Ma Space layout utilities */
+
+/* Ma zone — intentional vast emptiness between page acts */
+.ma-zone {
+  height: var(--space-32);
+}
+
+/* Ma breath — smaller pause between sections */
+.ma-breath {
+  height: var(--space-16);
+}
+
+/* Content container — 680px centered */
+.ma-content {
+  max-width: var(--max-content);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+/* Page container — 1120px centered */
+.ma-page {
+  max-width: var(--max-page);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+/* Responsive Ma zones */
+@media (max-width: 639px) {
+  .ma-zone {
+    height: var(--space-16); /* 64px on mobile */
+  }
+  .ma-breath {
+    height: var(--space-12); /* 48px on mobile */
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   Hero viewport — cinematic plate sizing across devices.
+   svh = small viewport height; stable on iOS when the URL bar
+   toggles. Clamp with sensible min/max so landscape phones
+   don't squash, and 4K screens don't overshoot.
+   ───────────────────────────────────────────────────────── */
+.hero-viewport {
+  height: 100svh;
+  min-height: 560px;
+}
+
+/* Content pocket bottom-pad scales from compact mobile to
+   generous desktop. Respected via `calc(var(--pocket-pb) + env(safe-area-inset-bottom))`
+   on the pocket element so iPhone home-indicator doesn't collide. */
+.hero-pocket { --pocket-pb: 32px; }
+
+@media (min-width: 640px) {
+  .hero-pocket { --pocket-pb: 56px; }
+}
+@media (min-width: 1024px) {
+  .hero-pocket { --pocket-pb: 72px; }
+}
+
+/* Short-landscape phones: relax the min-height so the hero can
+   collapse to a single screen instead of forcing a scroll. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-viewport {
+    min-height: 440px;
+  }
+  .hero-pocket { --pocket-pb: 24px; }
+}
+
+/* Fallback for browsers without svh support. dvh is newer but
+   widely supported; fall back to vh last. */
+@supports not (height: 100svh) {
+  .hero-viewport {
+    height: 100dvh;
+  }
+}
+@supports not (height: 100dvh) {
+  .hero-viewport {
+    height: 100vh;
+  }
+}

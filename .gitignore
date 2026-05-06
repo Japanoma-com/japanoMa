@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.pnp.*
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# TypeScript build info
+*.tsbuildinfo
+next-env.d.ts.bak
+
+# Environment / secrets — NEVER commit
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+.env.*.local
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Vercel + Sanity local state (machine-specific, do not commit)
+.vercel/
+.sanity/
+
+# Worktrees / git internals (project convention)
+.worktrees/
+.superpowers/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Binary working files (writers/designers should keep these elsewhere
+# — not in the code repo). The whitelist below is intentional: if
+# you genuinely need a PDF or image in the repo, place it under
+# public/ where it serves a runtime purpose.
+*.docx
+*.pages
+*.key
+*.pptx
+*.xlsx
+*.xls
+*.numbers
+*.pdf
+
+# Screenshots / recording captures
+Screenshot*.png
+screenshot*.png
+*-screenshot.png
+recording*.mov
+recording*.mp4
+
+# Allow files we DO want even though they match patterns above
+!public/**/*.png
+!public/**/*.pdf
+!sanity/**/*.png
+!docs/area-image-prompts.md

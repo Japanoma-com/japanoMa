@@ -1,0 +1,91 @@
+/* Ma Space v4 — Sumi & Cedar Design Tokens */
+
+:root {
+  /* Core palette */
+  --sumi: #1A1816;
+  --sumi-light: #3D3833;
+  /* --stone was #8A8279 (3.6:1 on washi) — darkened to #6A645C (4.7:1
+     on shoji, 4.5:1 on washi) to meet WCAG 2.1 AA for small text.
+     See docs/a11y/known-findings.md. */
+  --stone: #6A645C;
+  --ash: #C4BDB4;
+  --washi: #F5F0E8;
+  --shoji: #FAFAF7;
+  --kinu: #FFFFFF;
+  --border: #E5E0D8;
+
+  /* Semantic */
+  --matsu: #4A6B52;
+  --kohaku: #A67B3D;
+  --beni: #8B3A3A;
+  --ai: #3D5A7A;
+  --ai-deep: #2C4562;
+
+  /* Semantic tints (badge backgrounds) */
+  --matsu-tint: rgba(74, 107, 82, 0.08);
+  --kohaku-tint: rgba(166, 123, 61, 0.08);
+  --beni-tint: rgba(139, 58, 58, 0.08);
+  --ai-tint: rgba(61, 90, 122, 0.08);
+
+  /* Typography */
+  --font-editorial: 'Shippori Mincho B1', serif;
+  --font-ui: 'Satoshi', sans-serif;
+  --font-jp-fallback: 'Noto Sans JP', sans-serif;
+
+  /* Spacing (8px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Layout */
+  --max-content: 680px;
+  --max-page: 1120px;
+  --radius: 12px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-card: 0 1px 3px rgba(26, 24, 22, 0.05);
+  --shadow-card-hover: 0 4px 12px rgba(26, 24, 22, 0.08);
+
+  /* Motion */
+  --ease-settle: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-reveal: 600ms;
+
+  /* shadcn/ui compatibility layer */
+  --background: var(--washi);
+  --foreground: var(--sumi);
+  --card: var(--shoji);
+  --card-foreground: var(--sumi);
+  --popover: var(--shoji);
+  --popover-foreground: var(--sumi);
+  --primary: var(--ai);
+  --primary-foreground: var(--kinu);
+  --secondary: var(--washi);
+  --secondary-foreground: var(--sumi-light);
+  --muted: var(--washi);
+  --muted-foreground: var(--stone);
+  --accent: var(--washi);
+  --accent-foreground: var(--sumi);
+  --destructive: var(--beni);
+  --destructive-foreground: var(--kinu);
+  --input: var(--border);
+  --ring: var(--ai);
+
+  /* Recharts theme */
+  --chart-1: var(--ai);
+  --chart-2: var(--matsu);
+  --chart-3: var(--kohaku);
+  --chart-4: var(--beni);
+  --chart-5: var(--stone);
+}

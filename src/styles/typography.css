@@ -1,0 +1,99 @@
+/* Ma Space v4 — Typography Scale */
+
+/* Display / H1 */
+h1, .h1 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--sumi);
+}
+
+/* H2 */
+h2, .h2 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--sumi);
+}
+
+/* H3 */
+h3, .h3 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--sumi);
+}
+
+/* H4 */
+h4, .h4 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--sumi);
+}
+
+/* H5 / H6 — small-caps label style */
+h5, .h5, h6, .h6 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+/* Body */
+body, .body-text {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--sumi-light);
+}
+
+/* Data */
+.data-text {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  color: var(--sumi);
+}
+
+/* Caption */
+.caption {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--stone);
+}
+
+/* Overline */
+.label-overline {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+/* Score number (Decision Signal) */
+.score-display {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 1;
+}

@@ -1,0 +1,237 @@
+@import '../styles/tokens.css';
+@import '../styles/typography.css';
+@import '../styles/motion.css';
+@import '../styles/ma.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Ma Space colors */
+  --color-sumi: var(--sumi);
+  --color-sumi-light: var(--sumi-light);
+  --color-stone: var(--stone);
+  --color-ash: var(--ash);
+  --color-washi: var(--washi);
+  --color-shoji: var(--shoji);
+  --color-kinu: var(--kinu);
+  --color-bamboo: var(--border);
+  --color-matsu: var(--matsu);
+  --color-matsu-tint: var(--matsu-tint);
+  --color-kohaku: var(--kohaku);
+  --color-kohaku-tint: var(--kohaku-tint);
+  --color-beni: var(--beni);
+  --color-beni-tint: var(--beni-tint);
+  --color-ai: var(--ai);
+  --color-ai-deep: var(--ai-deep);
+  --color-ai-tint: var(--ai-tint);
+
+  /* Font families */
+  --font-editorial: var(--font-editorial);
+  --font-ui: var(--font-ui);
+
+  /* Spacing */
+  --spacing-ma-1: var(--space-1);
+  --spacing-ma-2: var(--space-2);
+  --spacing-ma-3: var(--space-3);
+  --spacing-ma-4: var(--space-4);
+  --spacing-ma-6: var(--space-6);
+  --spacing-ma-8: var(--space-8);
+  --spacing-ma-12: var(--space-12);
+  --spacing-ma-16: var(--space-16);
+  --spacing-ma-24: var(--space-24);
+  --spacing-ma-32: var(--space-32);
+
+  /* Max widths */
+  --container-content: var(--max-content);
+  --container-page: var(--max-page);
+
+  /* Box shadows */
+  --shadow-card: 0 1px 3px rgba(26, 24, 22, 0.05);
+  --shadow-card-hover: 0 4px 12px rgba(26, 24, 22, 0.08);
+
+  /* Transition timing */
+  --ease-settle: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Transition durations */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-reveal: 600ms;
+
+  /* Line height */
+  --leading-body: 1.8;
+}
+
+/* Ma Space token overrides for shadcn/ui compatibility */
+:root {
+  --background: var(--washi);
+  --foreground: var(--sumi);
+  --card: var(--shoji);
+  --card-foreground: var(--sumi);
+  --popover: var(--shoji);
+  --popover-foreground: var(--sumi);
+  --primary: var(--ai);
+  --primary-foreground: var(--kinu);
+  --secondary: var(--washi);
+  --secondary-foreground: var(--sumi-light);
+  --muted: var(--washi);
+  --muted-foreground: var(--stone);
+  --accent: var(--washi);
+  --accent-foreground: var(--sumi);
+  --destructive: var(--beni);
+  --destructive-foreground: var(--kinu);
+  --border: var(--border);
+  --input: var(--border);
+  --ring: var(--ai);
+  --radius: 12px;
+  --chart-1: var(--ai);
+  --chart-2: var(--matsu);
+  --chart-3: var(--kohaku);
+  --chart-4: var(--beni);
+  --chart-5: var(--stone);
+}
+
+@theme inline {
+  --font-sans: var(--font-ui);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-4xl: 28px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    outline-color: var(--color-ring);
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Universal focus ring — indigo, offset, and rounded to match the
+     Japandi 6px radius. Modern browsers (Chrome 94+ / Firefox 88+ /
+     Safari 16.4+) draw the outline path along the element's
+     border-radius, so applying a small radius here makes every
+     focusable element — buttons, inputs, selects, links, summaries —
+     pick up a rounded focus frame consistently. Inputs and buttons
+     that already declare a larger radius (e.g. .rounded-lg) keep theirs;
+     this only adds rounding to elements that don't have any. */
+  :focus-visible {
+    outline: 2px solid var(--color-ai);
+    outline-offset: 2px;
+  }
+  select:not([class*="rounded"]),
+  input[type="text"]:not([class*="rounded"]),
+  input[type="email"]:not([class*="rounded"]),
+  input[type="password"]:not([class*="rounded"]),
+  input[type="search"]:not([class*="rounded"]),
+  input[type="tel"]:not([class*="rounded"]),
+  input[type="number"]:not([class*="rounded"]),
+  input[type="url"]:not([class*="rounded"]),
+  textarea:not([class*="rounded"]),
+  button:not([class*="rounded"]),
+  [role="button"]:not([class*="rounded"]),
+  summary:not([class*="rounded"]) {
+    border-radius: var(--radius);
+  }
+}
+
+/* Soft fade-in used by hero images that swap when the user hovers a
+   different prefecture in the 3D map — keeps the swap from snapping. */
+@keyframes japa-fade-in {
+  from { opacity: 0; transform: scale(1.02); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-fade-in {
+  animation: japa-fade-in 280ms cubic-bezier(0.25, 0.1, 0.25, 1) backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in { animation: none; }
+}
+
+/* Portable Text prose styling */
+.prose-japanoma h2 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--sumi);
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
+}
+.prose-japanoma h3 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--sumi);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+}
+.prose-japanoma h4 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--sumi);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+.prose-japanoma h5, .prose-japanoma h6 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+}
+.prose-japanoma p { margin-bottom: var(--space-6); line-height: 1.8; color: var(--sumi-light); }
+.prose-japanoma ul, .prose-japanoma ol { margin-bottom: var(--space-6); padding-left: var(--space-6); }
+.prose-japanoma li { margin-bottom: var(--space-2); line-height: 1.8; color: var(--sumi-light); }
+.prose-japanoma a { color: var(--ai); text-decoration: underline; text-underline-offset: 3px; }
+.prose-japanoma a:hover { color: var(--ai-deep); }
+.prose-japanoma blockquote {
+  border-left: 2px solid var(--ai);
+  padding-left: var(--space-6);
+  margin: var(--space-8) 0;
+  color: var(--stone);
+  font-style: italic;
+}
+.prose-japanoma img { border-radius: var(--radius); margin: var(--space-8) 0; }
