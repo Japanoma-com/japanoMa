@@ -3,7 +3,7 @@ import { MaDivider, ScrollReveal } from '@/components/japandi';
 
 export const metadata = {
   title: 'Contact',
-  description: 'Get in touch with Go&C Partners. No pressure, no sales pitch. Just practical guidance about Japan ski properties.',
+  description: 'Get in touch with Go&C Partners. Practical guidance about Japan ski properties.',
 };
 
 // Area slug → display name mapping for context banner
@@ -40,7 +40,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
         <ScrollReveal delay={100}>
           <p className="text-sumi-light leading-body mb-ma-3 max-w-xl">
             Have questions about owning a ski home base in Northern Japan?
-            We&apos;re here with practical guidance. No pressure, no sales pitch.
+            We&apos;re here with practical guidance.
           </p>
           <p className="text-[13px] text-stone leading-relaxed mb-ma-12 max-w-xl">
             Replies within 48 hours. You choose when (and whether) to engage further.
