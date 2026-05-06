@@ -4,6 +4,44 @@ All notable changes to Japanoma. Format: [Keep a Changelog](https://keepachangel
 
 ## [Unreleased]
 
+## [2026-05-07] — MVP handover: clean repo, GitHub + Vercel deploy, quiz cascade polish
+
+### Added
+
+- **Handover repo** at `~/Desktop/japanoma-handover/` — fresh git history, 459 tracked files (vs 1001 in Craefto live), single squash commit. Strips all private business artefacts (Contract/, Documentation/, Go&C/, artifacts/, dist/, wireframes/, root .docx/.jpg/.pdf binaries, docs/superpowers/, internal Claude session prompts) and keeps only production code + technical docs (a11y, adr, architecture, personas, requirements, taxonomy, user-stories).
+- **README.md** — project overview, stack table, local setup steps, common scripts, project structure, doc map, compliance summary.
+- **DEPLOYMENT.md** — end-to-end deploy guide covering GitHub repo creation, Supabase + migrations, Sanity, Resend, Plausible, Sentry, Vercel env-var setup, custom domain, post-deploy smoke tests, and a troubleshooting section.
+- **Defensive `.gitignore`** in both Craefto live and the handover repo — blocks all binary working-document formats (`**/*.docx`, `**/*.pdf`, `**/*.xlsx`, `**/*.key`, `**/*.pages`, `**/*.numbers`, `**/*.pptx`) anywhere in the tree by default, with explicit `!public/` and `!sanity/` negations so runtime assets still ship. Also blocks `**/superpowers/`, screenshot patterns, editor junk (.idea/, .vscode/, *.swp). Stops `git add -A` from sweeping in private docs.
+- **`vercel.json`** at the handover repo root pinning the Next.js framework preset + build/output directories so future deploys don't fall back to Vercel's "Other" auto-detect (which would serve `public/` as static and break the App Router).
+- **Quiz step entrance cascade** — new `animate-quiz-rise` keyframe (6px translate + opacity, 480ms ease-settle) staggered across the question render: title (0ms) → subtitle (70ms) → answer cards (140ms + 35ms each). Replaces the flat 150ms opacity flash. Respects `prefers-reduced-motion`.
+- **Step-counter remount animation** — the active "X" in "X / 7" is keyed on `currentStep` so React swaps the node and `animate-fade-in` plays on every advance. Subtle but draws the eye to the new progress.
+
+### Changed
+
+- **Quiz subtitle** — typography upgraded to italic Shippori Mincho at 15–16px / 1.6 leading. Reads as a poetic guide's voice instead of generic body copy.
+- **Quiz step header** breathing room expanded (`mb-ma-12 → mb-ma-16`) and overline tracking tightened (`0.16em → 0.18em`) to match the more deliberate cadence below.
+- **Vercel deployment protection** disabled on the handover project via API patch (`ssoProtection: null`) so the test deploy is publicly accessible.
+- **GitHub repo visibility** — handover repo flipped to **public** at owner request.
+
+### Fixed
+
+- **Quiz subtitle spacing** — was `mb-ma-10`, which doesn't exist in the project's Ma scale (1/2/3/4/6/8/12/16/24/32 only). Tailwind silently emits zero CSS for unknown spacing tokens, so the subtitle was jamming straight into the answer cards on every question. Now `mb-ma-12` (48px). Real breath.
+- **Webpack `.next` cache corruption** — recurring during dev session led to stale-chunk MIME errors in browser. Fixed by clearing `.next` and restarting; flagged for future Turbopack switch (`next dev --turbo`) which bypasses the failing PackFileCacheStrategy entirely.
+
+### Deployment
+
+- **GitHub** → https://github.com/Japanoma-com/japanoMa (public, on the `Japanoma-com` org under the new `Japanoma` GitHub account).
+- **Vercel** → https://japanoma-japanoma-2058s-projects.vercel.app (project `prj_Nh8920RLGqbfUUx2lkz9TiehZj41` on team `japanoma-2058's projects`).
+- **Env vars** set on production + development scopes: DATABASE_URL, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, AUTH_SECRET (rotated, fresh 64-char hex), AUTH_URL, NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET, SANITY_WEBHOOK_SECRET (rotated), CONSENT_IP_HASH_SALT (rotated), AUTH_UI_ENABLED, RESEND_API_KEY, EMAIL_FROM, EMAIL_NOTIFICATIONS_TO. **Preview-scope vars not set** due to a Vercel CLI 50.41.0 bug with non-interactive preview adds — can be added via the dashboard later if branch previews are needed.
+- **Email notifications** target `kaz@goandcpartners.com, craefto@gmail.com, admin@japanoma.com.au`.
+- **All public routes verified** returning 200: `/`, `/quiz`, `/areas`, `/content`, `/contact`, `/privacy`, `/terms`, `/login`, `/signup`.
+
+### Notes for handover
+
+- Resend domain (`japanoma.com.au`) verification is on the team — DKIM, SPF, DMARC records in DNS, then `noreply@japanoma.com.au` will accept sends. Until verified, contact-form sends silently no-op.
+- Plausible and Sentry env vars are unset; add when those services are provisioned.
+- The Craefto-side `refactor/quiz-rise-cascade` branch carrying today's quiz polish is committed locally but not pushed (gh auth is on the new `Japanoma` account; would need `gh auth switch` to push). The handover repo carries the same change — that's what's deployed.
+
 ## [2026-05-06] — Late session: Auth contrast, Japanese copy chips, Deactivate, taxonomy cleanup
 
 ### Added
