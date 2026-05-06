@@ -76,3 +76,4 @@ recording*.mp4
 !public/**/*.pdf
 !sanity/**/*.png
 !docs/area-image-prompts.md
+.vercel

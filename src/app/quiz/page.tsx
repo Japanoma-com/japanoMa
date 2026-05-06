@@ -102,14 +102,25 @@ export default function QuizPage() {
     <div ref={containerRef} className="ma-page px-ma-6 py-ma-24">
       <div className="ma-content mx-auto">
         {/* Progress — stays fixed, no transition */}
-        <div className="mb-ma-12">
+        <div className="mb-ma-16">
           <div className="flex items-baseline justify-between mb-ma-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-stone">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone">
               Find your area
             </p>
-            <p className="text-[11px] text-stone tabular-nums">
-              <span className="text-sumi font-medium">{currentStep + 1}</span>
-              <span className="text-stone/60"> / {QUIZ_QUESTIONS.length}</span>
+            {/*
+              Step counter. The active number gets a key so React swaps
+              the node on each step change — combined with animate-fade-in,
+              that's a soft re-mount tick that draws the eye to the new
+              progress without any layout cost.
+            */}
+            <p className="text-[11px] text-stone tabular-nums inline-flex items-baseline">
+              <span
+                key={currentStep}
+                className="text-sumi font-semibold inline-block animate-fade-in"
+              >
+                {currentStep + 1}
+              </span>
+              <span className="text-stone/50">&nbsp;/&nbsp;{QUIZ_QUESTIONS.length}</span>
             </p>
           </div>
           <QuizProgress currentStep={currentStep} />

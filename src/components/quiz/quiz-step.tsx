@@ -166,17 +166,30 @@ export function QuizStep({ question, selectedAnswer, onSelect, onToggleMulti, on
 
   return (
     <div>
-      <h2 className="mb-ma-3 font-editorial text-[32px] sm:text-[36px] leading-[1.15] text-sumi">
+      {/*
+        Editorial entrance. Each tier (title → subtitle → answer grid)
+        rises from a 6px offset with a staggered delay, giving the
+        question a measured reveal instead of a flat opacity flash.
+        Animations use the project's slide-up keyframe (in styles/motion.css);
+        if reduced-motion is on, the keyframe respects prefers-reduced-motion.
+      */}
+      <h2
+        className="mb-ma-3 font-editorial text-[32px] sm:text-[36px] leading-[1.15] text-sumi animate-quiz-rise"
+        style={{ animationDelay: '0ms' }}
+      >
         {question.title}
       </h2>
       {question.subtitle && (
-        <p className="text-sumi-light text-[14px] sm:text-[15px] leading-relaxed mb-ma-10 max-w-xl">
+        <p
+          className="font-editorial italic text-sumi-light text-[15px] sm:text-[16px] leading-[1.6] mb-ma-12 max-w-xl animate-quiz-rise"
+          style={{ animationDelay: '70ms' }}
+        >
           {question.subtitle}
         </p>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-ma-3">
-        {question.answers.map((answer) => {
+        {question.answers.map((answer, idx) => {
           const isSelected = selectedSet.has(answer.id);
           const visual = getQuizVisual(answer.id);
 
@@ -185,10 +198,11 @@ export function QuizStep({ question, selectedAnswer, onSelect, onToggleMulti, on
               key={answer.id}
               onClick={() => handleClick(answer.id)}
               aria-pressed={isSelected}
+              style={{ animationDelay: `${140 + idx * 35}ms` }}
               // Borderless filled card. Definition by surface + shadow at
               // rest, soft shadow lift on hover, indigo ring + tint on
               // selected. Same vocabulary as AreaCardFrame.
-              className={`group relative text-left rounded-xl p-ma-6 transition-[background-color,box-shadow,transform] duration-base ease-settle ${
+              className={`group relative text-left rounded-xl p-ma-6 transition-[background-color,box-shadow,transform] duration-base ease-settle animate-quiz-rise ${
                 isSelected
                   ? 'bg-kinu ring-1 ring-ai/40 shadow-[0_4px_20px_-4px_rgba(61,90,122,0.18)]'
                   : 'bg-shoji shadow-card hover:bg-kinu hover:shadow-[0_4px_18px_-4px_rgba(26,24,22,0.12)] hover:-translate-y-[1px]'
