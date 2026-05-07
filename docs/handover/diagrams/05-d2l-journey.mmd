@@ -1,0 +1,64 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279',
+  'tertiaryColor': '#F5F0E8'
+}}}%%
+flowchart LR
+    subgraph Backend["11 backend phases"]
+        direction TB
+        P0[0_anon]
+        P1[1_decision]
+        P2[2_research]
+        P3[3_area]
+        P4[4_shortlist]
+        P5[5_due_diligence]
+        P6[6_offer]
+        P7[7_pre_close]
+        P8[8_post_close]
+        P9[9_living]
+        P10[10_revisit]
+        P0-->P1-->P2-->P3-->P4-->P5-->P6-->P7-->P8-->P9-->P10
+    end
+
+    subgraph User["6 user-facing labels"]
+        direction TB
+        L1[Decide First]
+        L2[Choose Area]
+        L3[Shortlist Homes]
+        L4[Check Risks]
+        L5[Make Offer]
+        L6[Prepare Closing]
+    end
+
+    P1 -.maps to.-> L1
+    P2 -.-> L1
+    P3 -.-> L2
+    P4 -.-> L3
+    P5 -.-> L4
+    P6 -.-> L5
+    P7 -.-> L6
+
+    subgraph Signals["captured signals"]
+        S1[quiz_completed]
+        S2[area_saved]
+        S3[lead_submitted]
+        S4[red_flag_panel_viewed]
+        S5[comparison_viewed]
+    end
+
+    Signals -->|inferNextPhase<br/>monotonic forward| Backend
+
+    Override[Manual override<br/>setPhaseOverride]
+    Override -.->|writes phase_set_via=override| Backend
+
+    classDef backend fill:#FAFAF7,stroke:#3D5A7A,color:#1A1816
+    classDef user    fill:#F5F0E8,stroke:#A67B3D,color:#1A1816
+    classDef signal  fill:#FFFFFF,stroke:#4A6B52,color:#1A1816
+    classDef ovr     fill:#FFFFFF,stroke:#8B3A3A,color:#1A1816,stroke-dasharray: 4 2
+    class P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10 backend
+    class L1,L2,L3,L4,L5,L6 user
+    class S1,S2,S3,S4,S5 signal
+    class Override ovr

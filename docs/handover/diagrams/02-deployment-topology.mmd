@@ -1,0 +1,54 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279'
+}}}%%
+flowchart TD
+    Dev[Local dev<br/>npm run dev :3001]
+    GH[GitHub repo<br/>main branch]
+
+    subgraph CI["CI · GitHub Actions"]
+        Lint[lint-and-test<br/>tsc · jest · next lint]
+        Lighthouse[Lighthouse CI<br/>perf budget]
+    end
+
+    subgraph Vercel["Vercel build"]
+        Build[npm run build<br/>Next.js · 459 files · 24 routes]
+        Edge[Edge cache<br/>static + ISR]
+        Funcs[Functions<br/>RSC + actions + APIs]
+    end
+
+    subgraph Backends["Managed services"]
+        Supa[(Supabase Postgres<br/>Sydney · ap-southeast-2<br/>migrations 001-024)]
+        SanityP[Sanity Studio<br/>production dataset]
+        ResendP[Resend domain<br/>noreply@japanoma.com.au]
+    end
+
+    Domain[japanoma.com.au<br/>DNS apex + www]
+
+    Dev -->|git push| GH
+    GH --> Lint
+    Lint --> Build
+    GH -.webhook.-> Build
+    Build --> Edge
+    Build --> Funcs
+    GH --> Lighthouse
+
+    Edge --> Domain
+    Funcs --> Supa
+    Funcs --> SanityP
+    Funcs --> ResendP
+    SanityP -.webhook on publish.-> Build
+
+    classDef src  fill:#FAFAF7,stroke:#3D5A7A,color:#1A1816
+    classDef ci   fill:#F5F0E8,stroke:#A67B3D,color:#1A1816
+    classDef vc   fill:#FFFFFF,stroke:#1A1816,color:#1A1816
+    classDef bk   fill:#FAFAF7,stroke:#4A6B52,color:#1A1816
+    classDef dom  fill:#3D5A7A,stroke:#2C4562,color:#FAFAF7
+    class Dev,GH src
+    class Lint,Lighthouse ci
+    class Build,Edge,Funcs vc
+    class Supa,SanityP,ResendP bk
+    class Domain dom

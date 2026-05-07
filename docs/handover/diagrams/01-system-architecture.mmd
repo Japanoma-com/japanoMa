@@ -1,0 +1,53 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279',
+  'secondaryColor': '#F5F0E8',
+  'tertiaryColor': '#FFFFFF'
+}}}%%
+flowchart LR
+    User((Australian<br/>buyer))
+
+    subgraph Edge["Vercel Edge"]
+        Mid[Next.js Middleware<br/>auth refresh · LAUNCH_MODE gate<br/>session cookie · rate limit]
+    end
+
+    subgraph App["Next.js 15 App · React 19 RSC · Vercel"]
+        Pages[Pages / RSC<br/>quiz · areas · content · account · admin]
+        Actions[Server actions<br/>signUp · captureSignal · submitContactForm<br/>recordConsent · createLead · setPhaseOverride]
+        APIRoutes[API routes<br/>/api/journey/signal · /api/og]
+    end
+
+    subgraph Supabase["Supabase Sydney"]
+        Auth[Auth<br/>email + password]
+        DB[(Postgres<br/>RLS · 24 migrations)]
+    end
+
+    Sanity[Sanity CMS<br/>articles · phase tags<br/>buyer types]
+    Resend[Resend<br/>transactional email]
+    Plausible[Plausible<br/>cookieless analytics]
+    Sentry[Sentry<br/>error monitoring]
+
+    User -->|HTTPS| Mid
+    Mid --> Pages
+    Pages --> Actions
+    Pages --> APIRoutes
+    Pages -.SSG / ISR.-> Sanity
+    Actions --> Auth
+    Actions --> DB
+    Actions --> Resend
+    APIRoutes --> DB
+    Pages -.script.-> Plausible
+    App -.errors.-> Sentry
+    Mid --> Auth
+
+    classDef edge fill:#F5F0E8,stroke:#3D5A7A,color:#1A1816,stroke-width:1px
+    classDef app  fill:#FAFAF7,stroke:#1A1816,color:#1A1816,stroke-width:1px
+    classDef ext  fill:#FFFFFF,stroke:#8A8279,color:#1A1816,stroke-width:1px
+    classDef user fill:#3D5A7A,stroke:#2C4562,color:#FAFAF7,stroke-width:0px
+    class Mid edge
+    class Pages,Actions,APIRoutes app
+    class Auth,DB,Sanity,Resend,Plausible,Sentry ext
+    class User user

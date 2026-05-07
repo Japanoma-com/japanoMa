@@ -76,4 +76,14 @@ recording*.mp4
 !public/**/*.pdf
 !sanity/**/*.png
 !docs/area-image-prompts.md
+!docs/handover/**/*.pdf
+!docs/handover/**/*.docx
+!docs/handover/**/*.pptx
+!docs/handover/**/*.png
+!docs/handover/**/*.svg
+# The repo-wide `dist/` rule (line 10, from Next.js template) was
+# also catching docs/handover/dist/ — explicitly unignore that
+# subtree so the rendered handover binaries can be committed.
+!docs/handover/dist/
+!docs/handover/dist/**
 .vercel

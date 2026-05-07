@@ -1,0 +1,143 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279'
+}}}%%
+erDiagram
+    auth_users ||--o{ quiz_responses        : "owns (nullable)"
+    auth_users ||--o{ saves                 : "owns"
+    auth_users ||--o{ leads                 : "owns"
+    auth_users ||--o{ consent_records       : "consents"
+    auth_users ||--o{ user_journey_state    : "has"
+    auth_users ||--o{ journey_signals       : "emits"
+    auth_users ||--o{ journey_notes         : "writes"
+    auth_users ||--o{ journey_bookmarks     : "saves"
+    auth_users ||--o{ policy_acknowledgments: "acknowledges"
+
+    prefectures ||--o{ cities    : contains
+    cities      ||--o{ local_areas: contains
+    consent_records ||--o{ leads : "is basis for"
+    consent_text_versions ||--o{ consent_records : "uses version"
+
+    auth_users {
+        uuid id PK
+        text email
+        jsonb user_metadata
+        jsonb app_metadata
+        timestamptz created_at
+    }
+
+    prefectures {
+        uuid id PK
+        text slug
+        text name_en
+        text name_ja
+    }
+
+    cities {
+        uuid id PK
+        uuid prefecture_id FK
+        text slug
+        text name_en
+        text name_ja
+        text region_type
+        text launch_priority
+        bigint avg_property_price_jpy
+        text hero_image_path
+        numeric latitude
+        numeric longitude
+    }
+
+    quiz_responses {
+        uuid id PK
+        uuid user_id FK
+        text quiz_type
+        jsonb responses
+        timestamptz created_at
+    }
+
+    leads {
+        uuid id PK
+        uuid user_id FK
+        uuid consent_record_id FK
+        text area_slug
+        text status
+        jsonb profile_snapshot
+        timestamptz created_at
+    }
+
+    consent_records {
+        uuid id PK
+        uuid user_id FK
+        text consent_text_version FK
+        text scope
+        text consent_text_hash
+        timestamptz captured_at
+        timestamptz withdrawn_at
+    }
+
+    user_journey_state {
+        uuid user_id PK
+        text phase
+        text buyer_type
+        text phase_set_via
+        timestamptz updated_at
+    }
+
+    journey_signals {
+        uuid id PK
+        uuid user_id FK
+        text signal_type
+        text phase_before
+        text phase_after
+        jsonb metadata
+    }
+
+    journey_notes {
+        uuid id PK
+        uuid user_id FK
+        text phase
+        text body
+        text_array linked_property_slugs
+        boolean pinned
+    }
+
+    journey_bookmarks {
+        uuid id PK
+        uuid user_id FK
+        text url
+        text url_canonical
+        text url_hash
+        text phase
+    }
+
+    saves {
+        uuid id PK
+        uuid user_id FK
+        text content_type
+        text content_id
+        text title
+        text href
+    }
+
+    policy_acknowledgments {
+        uuid id PK
+        uuid user_id FK
+        text doc_type
+        text version
+        text context
+        text ip_address
+        text user_agent
+        timestamptz acknowledged_at
+    }
+
+    consent_text_versions {
+        uuid id PK
+        text version
+        text scope
+        text body
+        text body_hash
+        timestamptz effective_from
+    }

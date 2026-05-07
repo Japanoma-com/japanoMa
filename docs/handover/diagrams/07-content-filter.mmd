@@ -1,0 +1,51 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279'
+}}}%%
+flowchart TD
+    User([Visitor lands on /content])
+
+    subgraph Top["Tier 1 — Phase timeline"]
+        T1[Decide]
+        T2[Area]
+        T3[Shortlist]
+        T4[Risks]
+        T5[Offer]
+        T6[Closing]
+    end
+
+    subgraph Sec["Tier 2 — Secondary chips"]
+        Area[Area chip]
+        PT[Property Type chip]
+        UC[Use Case chip]
+        BT[Buyer Type chip]
+    end
+
+    Search[Search box<br/>title + body + tags]
+
+    Sanity[(Sanity articles<br/>phase + buyerTypes<br/>property_types · use_cases<br/>area)]
+
+    Result[Filtered article grid<br/>RSC + ISR cached]
+
+    User --> Top
+    User --> Sec
+    User --> Search
+
+    Top -->|?phase=...| Result
+    Sec -->|?type · ?use · ?buyerType · ?area| Result
+    Search -->|?q=...| Result
+
+    Result -.GROQ query.-> Sanity
+    Sanity -.matched docs.-> Result
+
+    classDef tier1 fill:#FAFAF7,stroke:#3D5A7A,color:#1A1816
+    classDef tier2 fill:#F5F0E8,stroke:#A67B3D,color:#1A1816
+    classDef cms   fill:#FFFFFF,stroke:#4A6B52,color:#1A1816
+    classDef out   fill:#3D5A7A,stroke:#2C4562,color:#FAFAF7
+    class T1,T2,T3,T4,T5,T6 tier1
+    class Area,PT,UC,BT,Search tier2
+    class Sanity cms
+    class Result out

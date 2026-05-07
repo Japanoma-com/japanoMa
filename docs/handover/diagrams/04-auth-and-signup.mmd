@@ -1,0 +1,39 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279'
+}}}%%
+sequenceDiagram
+    autonumber
+    actor V as Visitor
+    participant UI as /signup
+    participant Z as Zod schema
+    participant SA as signUp action
+    participant SB as Supabase Auth
+    participant LP as logPolicyAcknowledgment
+    participant T as policy_acknowledgments
+    participant E as Email confirm
+
+    V->>UI: name + email + password + tickbox
+    UI->>Z: validate (acknowledgePolicies must be true)
+    Z-->>UI: parsed payload
+    UI->>SA: invoke server action
+
+    SA->>SB: auth.signUp(email, password, name)
+    SB-->>SA: data.user.id
+    SB->>E: send confirm email (PKCE link)
+
+    par log T&Cs version
+        SA->>LP: { userId, docTypes:['terms','privacy'], context:'signup' }
+        LP->>T: insert 1 row per doc<br/>(version + IP + UA)
+    and continue happy path
+        SA-->>UI: { redirectTo: '/verify-email' }
+    end
+
+    Note over V,E: User clicks email link
+    V->>E: /auth/confirm?code=...
+    E-->>V: PKCE exchange, set session
+    V->>UI: redirect to /account
+    Note over V: Future signin auto-clears<br/>user_metadata.deactivated_at

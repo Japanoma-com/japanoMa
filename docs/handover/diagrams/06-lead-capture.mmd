@@ -1,0 +1,47 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279'
+}}}%%
+sequenceDiagram
+    autonumber
+    actor U as Authenticated user
+    participant Card as Recommended-area card
+    participant Modal as Consent modal
+    participant Action as createLead /<br/>recordConsent action
+    participant CR as consent_records
+    participant L as leads
+    participant E as Resend
+    participant Inbox as kaz · craefto · admin@japanoma
+
+    Note over U,Inbox: User has active consent already
+    U->>Card: Express interest →
+    Card->>Action: createLeadWithExistingConsent
+    Action->>CR: SELECT active row (scope=lead)
+    CR-->>Action: consent_record_id
+    Action->>L: INSERT lead<br/>(area_slug · profile_snapshot · consent_id)
+    Action->>E: notification email
+    E->>Inbox: deliver
+    Action-->>Card: { success, leadId }
+    Card-->>U: "Interest recorded ✓"
+
+    Note over U,Inbox: First-time interest (no active consent)
+    U->>Card: Express interest →
+    Card->>Modal: open
+    Modal-->>U: show consent text + version + tickbox
+    U->>Modal: agree + confirm
+    Modal->>Action: recordConsentAndCreateLead
+    Action->>CR: INSERT consent_record<br/>(version · hash · scope=lead · ip_hash · ua)
+    CR-->>Action: consent_record_id
+    Action->>L: INSERT lead with that id
+    Action->>E: notification email
+    E->>Inbox: deliver
+    Action-->>Modal: { success, leadId }
+    Modal-->>Card: "Interest recorded ✓"
+
+    Note over U: Withdrawal — sets withdrawn_at on consent
+    U->>Action: withdrawAllConsent
+    Action->>CR: UPDATE withdrawn_at
+    Action->>L: UPDATE leads SET withdrawn_at

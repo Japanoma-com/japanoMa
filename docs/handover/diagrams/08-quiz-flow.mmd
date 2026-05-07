@@ -1,0 +1,66 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontFamily': 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  'primaryColor': '#FAFAF7',
+  'primaryTextColor': '#1A1816',
+  'primaryBorderColor': '#3D5A7A',
+  'lineColor': '#8A8279'
+}}}%%
+flowchart LR
+    Start([Visitor / authed user])
+
+    subgraph Steps["7-step recommendation quiz"]
+        direction TB
+        Q1[1 - Purpose<br/>holiday · ski-base · year-round<br/>investment · lifestyle+income]
+        Q2[2 - Ski season<br/>weekend · annual · regular · full]
+        Q3[3 - Family<br/>solo · couple · young · teen<br/>empty-nest · multi-gen]
+        Q4[4 - Property type<br/>multi-select up to 3]
+        Q5[5 - Condition<br/>as-is · inspected · reform<br/>turnkey · new-build]
+        Q6[6 - Budget<br/>under-15M · 15-30M · 30-50M · 50M+]
+        Q7[7 - Priority tiebreaker<br/>slopes · onsen · affordable · 4-seasons]
+        Q1-->Q2-->Q3-->Q4-->Q5-->Q6-->Q7
+    end
+
+    subgraph Score["scoreQuiz · /lib/quiz/scoring"]
+        direction TB
+        Loop[For each P1 city<br/>compute weighted sum]
+        W1[Purpose affinity 0-22]
+        W2[Proximity 0-22<br/>weighted by ski_season]
+        W3[Property type 0-13]
+        W4[Budget 0-13]
+        W5[Priority 0-18]
+        W6[Family-culture 0-10]
+        Sum[Sum / 98 normalised to 100]
+        Loop --> W1
+        Loop --> W2
+        Loop --> W3
+        Loop --> W4
+        Loop --> W5
+        Loop --> W6
+        W1 --> Sum
+        W2 --> Sum
+        W3 --> Sum
+        W4 --> Sum
+        W5 --> Sum
+        W6 --> Sum
+    end
+
+    Top3[Top 3 cities<br/>+ explanation copy]
+    Persist[(quiz_responses<br/>jsonb snapshot)]
+    Account["account · recommended-areas grid"]
+    Contact["contact · source=quiz<br/>pre-filled context panel"]
+
+    Start --> Steps
+    Q7 --> Score
+    Score --> Top3
+    Top3 --> Persist
+    Top3 --> Account
+    Top3 --> Contact
+
+    classDef step  fill:#FAFAF7,stroke:#3D5A7A,color:#1A1816
+    classDef wt    fill:#FFFFFF,stroke:#A67B3D,color:#1A1816
+    classDef out   fill:#3D5A7A,stroke:#2C4562,color:#FAFAF7
+    classDef store fill:#F5F0E8,stroke:#4A6B52,color:#1A1816
+    class Q1,Q2,Q3,Q4,Q5,Q6,Q7 step
+    class Loop,W1,W2,W3,W4,W5,W6,Sum wt
+    class Top3,Account,Contact out
+    class Persist store
