@@ -93,6 +93,12 @@ export function Header({ user, journeyState }: HeaderProps) {
 
   const toggle = useCallback(() => setIsOpen((v) => !v), []);
 
+  // The pre-launch coming-soon page renders standalone — no nav,
+  // no logo lockup chrome — so the brand mark on that page lives
+  // alone and reads as the centerpiece. Early-return AFTER all hooks
+  // to keep call order stable.
+  if (pathname === '/coming-soon') return null;
+
   return (
     <>
       <header

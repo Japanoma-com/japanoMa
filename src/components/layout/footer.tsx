@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { LogoLockup } from '@/components/brand';
 
 const footerLinks = [
@@ -12,6 +15,11 @@ const footerLinks = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+  // Hidden on the pre-launch coming-soon page so the brand mark there
+  // reads as the standalone centerpiece (no nav, no chrome).
+  if (pathname === '/coming-soon') return null;
+
   return (
     <footer className="border-t border-bamboo/50 mt-ma-32">
       <div className="ma-page px-ma-6 py-ma-16">
